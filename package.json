@@ -1,0 +1,42 @@
+{
+  "name": "@kwai-explore/picture",
+  "version": "0.0.3",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "build:example": "vite build -c vite-example.config.ts"
+  },
+  "dependencies": {
+    "vue-demi": "^0.13.11"
+  },
+  "files": [
+    "dist"
+  ],
+  "module": "./dist/picture.js",
+  "typings": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/picture.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^0.27.0",
+    "@kwai-explore/eslint-config": "^0.1.0",
+    "@vitejs/plugin-vue": "^3.1.2",
+    "eslint": "^8.25.0",
+    "prettier": "^2.7.1",
+    "typescript": "^4.8.4",
+    "vite": "^3.1.8",
+    "vite-plugin-dts": "^1.6.6",
+    "vite-plugin-image-presets": "^0.3.2",
+    "vite-plugin-libcss": "^1.0.5",
+    "vue": "^3.2.41",
+    "vue-tsc": "^1.0.8"
+  },
+  "peerDependencies": {
+    "vite-plugin-image-presets": "^0.3.2"
+  }
+}
