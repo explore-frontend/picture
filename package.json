@@ -1,10 +1,10 @@
 {
-  "name": "@kwai-explore/picture",
+  "name": "@kwai-explore/picture.vue",
   "version": "0.0.3",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vue-tsc --noEmit && rm -rf dist/* && cp ./src/components/Picture.vue dist",
     "preview": "vite preview",
     "build:example": "vite build -c vite-example.config.ts"
   },
@@ -14,12 +14,12 @@
   "files": [
     "dist"
   ],
-  "module": "./dist/picture.js",
-  "typings": "./dist/index.d.ts",
+  "module": "./dist/Picture.vue",
+  "typings": "./dist/Picture.vue",
   "exports": {
     ".": {
-      "import": "./dist/picture.js",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/Picture.vue",
+      "types": "./dist/Picture.vue"
     }
   },
   "devDependencies": {

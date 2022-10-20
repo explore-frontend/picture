@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue-demi';
+import {
+  computed,
+  ImgHTMLAttributes,
+  onMounted,
+  ref,
+  SourceHTMLAttributes,
+} from 'vue-demi';
 // TODO: 封装 provider 来应对不同的接口
-type ImageAttrs = Partial<HTMLImageElement> & {
-  class?: string;
-};
+
+// 应该也只有 style 属性是不一样的？
+// 这的确是这个组件可以接受的参数，但貌似生产端不是这样的...（难道需要我 fork 一下吗）
 interface PictureProp {
-  src: ImageAttrs[];
+  src: ImgHTMLAttributes[];
 }
 
 // TODO: 支持SSR/SSG
@@ -51,6 +57,8 @@ const isSafari = getBrowserName() === 'Safari';
 onMounted(() => {
   safariSrc.value = lastSource.value.src;
 });
+type X = SourceHTMLAttributes;
+const x: X = sources.value[0];
 </script>
 
 <script lang="ts">
@@ -62,13 +70,9 @@ export default {
 <template>
   <div class="image-container" :class="{ loaded: loaded }">
     <picture>
-      <source
-        v-for="(attrs, index) in (sources as any)"
-        :key="index"
-        v-bind="attrs"
-      />
+      <source v-for="(attrs, index) in sources" :key="index" v-bind="attrs" />
       <img
-        v-bind="{ ...lastSource, ...$attrs } as any"
+        v-bind="{ ...lastSource, ...$attrs }"
         :src="isSafari ? safariSrc : lastSource.src"
         :srcset="isSafari ? safariSrc : lastSource.src"
         @load="loaded = true"

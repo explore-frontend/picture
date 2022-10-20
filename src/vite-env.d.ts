@@ -6,6 +6,6 @@ declare module '*.vue' {
   export default component;
 }
 declare module '*?preset=modern' {
-  const src: import('vite-plugin-image-presets').ImageAttrs[];
+  const src: import('vue').ImgHTMLAttributes[];
   export default src;
 }

@@ -15,6 +15,9 @@
  `vite.config.ts`
 
  ```ts
+ import imagePresets, { formatPreset } from 'vite-plugin-image-presets';
+ 
+ // ...
   plugins: [
     vue(),
     imagePresets({
@@ -36,7 +39,9 @@
 
  ```ts
  declare module '*?preset=modern' {
-  const src: import('vite-plugin-image-presets').ImageAttrs[];
+  const src: import('vue').ImgHTMLAttributes[];
+  // vue2.7 换成：
+  // const src: import('vue/types/jsx').ImgHTMLAttributes[];
   export default src;
 }
  ```
@@ -58,6 +63,22 @@ import examplePic from './components/example.jpg?preset=modern';
 <template>
   <Picture :src="examplePic"></Picture>
 </template>
+```
+
+数据不能用插件生成时（比如接口种的数据），样例 `src` 属性是(注意顺序)
+
+```json
+  [{
+    type: 'image/webp',
+    srcset: '/assets/logo.ffc730c4.webp 48w, /assets/logo.1f874174.webp 96w',
+  },
+  {
+    type: 'image/jpeg',
+    srcset: '/assets/logo.063759b1.jpeg 48w, /assets/logo.81d93491.jpeg 96w',
+    src: '/assets/logo.81d93491.jpeg',
+    class: 'img thumb',
+    loading: 'lazy',
+  ]
 ```
 
 ### 对应的行为
