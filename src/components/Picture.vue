@@ -1,11 +1,5 @@
 <script setup lang="ts">
-import {
-  computed,
-  ImgHTMLAttributes,
-  onMounted,
-  ref,
-  SourceHTMLAttributes,
-} from 'vue-demi';
+import { computed, ImgHTMLAttributes, onMounted, ref } from 'vue-demi';
 // TODO: 封装 provider 来应对不同的接口
 
 // 应该也只有 style 属性是不一样的？
@@ -57,8 +51,6 @@ const isSafari = getBrowserName() === 'Safari';
 onMounted(() => {
   safariSrc.value = lastSource.value.src;
 });
-type X = SourceHTMLAttributes;
-const x: X = sources.value[0];
 </script>
 
 <script lang="ts">
