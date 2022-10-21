@@ -1,0 +1,26 @@
+## OS
+.DS_Store
+.idea
+.editorconfig
+package-lock.json
+.npmrc
+
+# Ignored suffix
+*.log
+*.md
+*.svg
+*.png
+*ignore
+
+## Local
+node_modules
+.husky
+
+## Built-files
+.cache
+dist
+pnpm-lock.yaml
+pnpm-workspace.yaml
+custom.stylus.template.handlebars
+
+**/public/**
