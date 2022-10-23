@@ -5,7 +5,12 @@ import '@/assets/base.css';
 import garden1Pic from './assets/Garden.png?preset=modern';
 import garden2Pic from './assets/Garden2.jpeg?preset=modern';
 import { ref } from 'vue';
-const activePic = ref(garden1Pic);
+import type { ImgHTMLAttributes } from 'vue/types/jsx';
+const activePic = ref<ImgHTMLAttributes[]>(garden1Pic);
+function changePic(pic: ImgHTMLAttributes[]) {
+    // @ts-expect-error
+    activePic.value = pic;
+}
 </script>
 
 <template>
@@ -23,8 +28,8 @@ const activePic = ref(garden1Pic);
             </div>
         </header>
         <Picture :src="activePic"></Picture>
-        <button @click="activePic = garden1Pic">切换图片1</button>
-        <button @click="activePic = garden2Pic">切换图片2</button>
+        <button @click="changePic(garden1Pic)">切换图片1</button>
+        <button @click="changePic(garden2Pic)">切换图片2</button>
         <button @click="activePic = []">切换成空数组</button>
 
         <router-view />
