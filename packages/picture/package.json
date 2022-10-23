@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && rm -rf dist/* && cp ./src/components/Picture.vue dist",
+    "build": "rm -rf dist/* && cp ./src/components/Picture.vue dist",
+    "type-check": "vue-tsc --noEmit",
     "preview": "vite preview",
     "build:example": "vite build -c vite-example.config.ts"
   },
@@ -25,6 +26,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^0.27.0",
     "@kwai-explore/eslint-config": "^0.1.0",
+    "@kwai-explore/tsconfig": "^0.0.1",
     "@vitejs/plugin-vue": "^3.1.2",
     "eslint": "^8.25.0",
     "prettier": "^2.7.1",

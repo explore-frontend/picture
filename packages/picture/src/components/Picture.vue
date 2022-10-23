@@ -1,9 +1,23 @@
 <script setup lang="ts">
-import { computed, ImgHTMLAttributes, onMounted, ref } from 'vue-demi';
+import { computed, onMounted, ref } from 'vue-demi';
 // TODO: 封装 provider 来应对不同的接口
 
-// 应该也只有 style 属性是不一样的？
-// 这的确是这个组件可以接受的参数，但貌似生产端不是这样的...（难道需要我 fork 一下吗）
+// https://github.com/vuejs/core runtime-dom.d.ts
+// 为了同时在 vue2 和 vue3 里用，先把不兼容的部分 copy 出来简化
+type Numberish = number | string;
+interface ImgHTMLAttributes {
+  alt?: string;
+  crossorigin?: 'anonymous' | 'use-credentials' | '';
+  decoding?: 'async' | 'auto' | 'sync';
+  height?: Numberish;
+  sizes?: string;
+  src?: string;
+  srcset?: string;
+  usemap?: string;
+  width?: Numberish;
+}
+
+// 其实跟生产端不太一样
 interface PictureProp {
   src: ImgHTMLAttributes[];
 }
@@ -35,9 +49,22 @@ const props = defineProps<PictureProp>();
 // https://github.com/ElMassimo/iles/blob/main/packages/images/src/Picture.vue
 const allSources = computed(() => props.src);
 const sources = computed(() => allSources.value.slice(0, -1));
-const lastSource = computed(
-  () => allSources.value[allSources.value.length - 1],
-);
+const lastSource = computed(() => {
+  const res = allSources.value[allSources.value.length - 1];
+  // TODO: 测试一下传 [] 然后穿正常值的表现
+  assertNotNil(res);
+  return res;
+});
+function isNotNil<T>(x: T): x is NonNullable<T> {
+  return x != null;
+}
+
+function assertNotNil<T>(v: T, message?: string): asserts v is NonNullable<T> {
+  if (!isNotNil(v)) {
+    throw new Error(message ?? 'Must not be null or undefined');
+  }
+}
+
 const bgColors = ['#A7D2CB', '#874C62', '#C98474', '#F2D388'];
 const lightenColors = ['#dcedea', '#d4b2bf', '#e9cec7', '#faedcf'];
 
@@ -48,6 +75,7 @@ const loaded = ref(false);
 
 const safariSrc = ref();
 const isSafari = getBrowserName() === 'Safari';
+// TODO: 需要测一下地址变化的情况
 onMounted(() => {
   safariSrc.value = lastSource.value.src;
 });
