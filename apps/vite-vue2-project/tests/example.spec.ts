@@ -4,7 +4,7 @@ test('basic test', async ({ page, browserName }) => {
     page.on('request', (request) => {
         console.log('>>', request.method(), request.url());
         const url = request.url();
-        if (url.includes('Gardens')) {
+        if (url.includes('Garden')) {
             if (browserName === 'chromium') {
                 expect(url.endsWith('avif')).toBeTruthy();
                 // 这里以后有自动升级系统的话结果可能就会变了，不知道应该怎么限制一下

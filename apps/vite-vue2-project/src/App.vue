@@ -2,7 +2,10 @@
 import Picture from '@kwai-explore/picture.vue';
 import HelloWorld from '@/components/HelloWorld.vue';
 import '@/assets/base.css';
-import examplePic from './assets/Gardens.png?preset=modern';
+import garden1Pic from './assets/Garden.png?preset=modern';
+import garden2Pic from './assets/Garden2.jpeg?preset=modern';
+import { ref } from 'vue';
+const activePic = ref(garden1Pic);
 </script>
 
 <template>
@@ -19,7 +22,10 @@ import examplePic from './assets/Gardens.png?preset=modern';
                 </nav>
             </div>
         </header>
-        <Picture :src="examplePic"></Picture>
+        <Picture :src="activePic"></Picture>
+        <button @click="activePic = garden1Pic">切换图片1</button>
+        <button @click="activePic = garden2Pic">切换图片2</button>
+        <button @click="activePic = []">切换成空数组</button>
 
         <router-view />
     </div>

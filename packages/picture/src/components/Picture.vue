@@ -51,7 +51,6 @@ const allSources = computed(() => props.src);
 const sources = computed(() => allSources.value.slice(0, -1));
 const lastSource = computed(() => {
   const res = allSources.value[allSources.value.length - 1];
-  // TODO: 测试一下传 [] 然后穿正常值的表现
   assertNotNil(res);
   return res;
 });
@@ -75,7 +74,7 @@ const loaded = ref(false);
 
 const safariSrc = ref();
 const isSafari = getBrowserName() === 'Safari';
-// TODO: 需要测一下地址变化的情况
+// 测试过url变化时加载的图片符合预期
 onMounted(() => {
   safariSrc.value = lastSource.value.src;
 });
