@@ -1,6 +1,10 @@
-# @kwai-explore/picture
+# @kwai-explore/picture.vue
 
 用于展示多种图片格式的 picture 组件。
+
+## 安装
+
+`pnpm install @kwai-explore/picture.vue`
 
 ## 使用
 
@@ -8,43 +12,43 @@
 
 ### 安装 [vite-plugin-image-presets](github.com/ElMassimo/vite-plugin-image-presets)
 
-`pnpm add -D vite-plugin-image-presets` 
+`pnpm add -D vite-plugin-image-presets`
 
- ### 建议配置
+### 建议配置
 
- `vite.config.ts`
+`vite.config.ts`
 
- ```ts
- import imagePresets, { formatPreset } from 'vite-plugin-image-presets';
- 
- // ...
-  plugins: [
-    vue(),
-    imagePresets({
-      modern: formatPreset({
-        formats: {
-          avif: {},
-          webp: {},
-          original: {},
-        },
-        loading: 'lazy',
-      }),
-    }),
-  ],
- ```
+```ts
+import imagePresets, { formatPreset } from 'vite-plugin-image-presets';
+
+// ...
+ plugins: [
+   vue(),
+   imagePresets({
+     modern: formatPreset({
+       formats: {
+         avif: {},
+         webp: {},
+         original: {},
+       },
+       loading: 'lazy',
+     }),
+   }),
+ ],
+```
 
 添加类型：
- 
- `vite-env.d.ts`
 
- ```ts
- declare module '*?preset=modern' {
+`vite-env.d.ts`
+
+```ts
+declare module '*?preset=modern' {
   const src: import('vue').ImgHTMLAttributes[];
   // vue2.7 换成：
   // const src: import('vue/types/jsx').ImgHTMLAttributes[];
   export default src;
 }
- ```
+```
 
 ### 安装依赖
 
@@ -79,6 +83,18 @@ import examplePic from './components/example.jpg?preset=modern';
     class: 'img thumb',
     loading: 'lazy',
   ]
+```
+
+### 建议添加 eslint 规则
+
+```
+        'vue/no-restricted-html-elements': [
+            'warn',
+            {
+                element: 'img',
+                message: 'Prefer use of our @kwai-explore/picture.vue component',
+            },
+        ],
 ```
 
 ### 对应的行为
