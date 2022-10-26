@@ -4,7 +4,9 @@ import examplePic from './assets/example.jpg?preset=modern';
 </script>
 
 <template>
-  <Picture :src="examplePic"></Picture>
+  <div>vue3 demo</div>
+  <!-- <Picture :src="examplePic"></Picture> -->
+  <Picture :src="examplePic" placeholder="color"></Picture>
 </template>
 
 <style scoped>

@@ -17,9 +17,12 @@ interface ImgHTMLAttributes {
   width?: Numberish;
 }
 
+// 这里的属性其实也有点奇怪...理论上大部分只需要放在最后一个就可以了
 // 其实跟生产端不太一样
 interface PictureProp {
   src: ImgHTMLAttributes[];
+  // color 会展示一个渐变色块的 loading 效果，加上 fade-in 的加载成功的渐变
+  placeholder?: 'empty' | 'color';
 }
 
 // TODO: 支持SSR/SSG
@@ -44,7 +47,9 @@ function getBrowserName() {
   }
 }
 
-const props = defineProps<PictureProp>();
+const props = withDefaults(defineProps<PictureProp>(), {
+  placeholder: 'empty',
+});
 
 // https://github.com/ElMassimo/iles/blob/main/packages/images/src/Picture.vue
 const allSources = computed(() => props.src);
@@ -87,7 +92,10 @@ export default {
 </script>
 
 <template>
-  <div class="image-container" :class="{ loaded: loaded }">
+  <div
+    class="image-container"
+    :class="{ loaded: loaded, 'placeholder-player': placeholder === 'color' }"
+  >
     <picture>
       <source v-for="(attrs, index) in sources" :key="index" v-bind="attrs" />
       <img
@@ -101,7 +109,7 @@ export default {
 </template>
 
 <style scoped>
-.image-container {
+.placeholder-player {
   animation: placeholder ease-in-out 2s infinite;
 }
 .image-container img {
@@ -126,10 +134,10 @@ export default {
     opacity: 100%;
   }
 }
-.image-container.loaded {
+.placeholder-player.loaded {
   animation: none;
 }
-.image-container.loaded img {
+.placeholder-player.loaded img {
   animation: fadeIn linear 0.5s;
 }
 </style>

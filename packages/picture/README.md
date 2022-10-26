@@ -85,6 +85,16 @@ import examplePic from './components/example.jpg?preset=modern';
   ]
 ```
 
+完整支持的属性
+
+```ts
+interface PictureProp {
+  src: ImgHTMLAttributes[];
+  // color 会展示一个渐变色块的 loading 效果，加上 fade-in 的加载成功的渐变
+  placeholder?: 'empty' | 'color';
+}
+```
+
 ### 建议添加 eslint 规则
 
 ```
