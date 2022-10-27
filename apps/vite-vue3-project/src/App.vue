@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import Picture from '@kwai-explore/picture.vue';
 import examplePic from './assets/example.jpg?preset=modern';
+function onLoad(...args: any[]) {
+  console.log(...args);
+}
 </script>
 
 <template>
   <div>vue3 demo</div>
   <!-- <Picture :src="examplePic"></Picture> -->
-  <Picture :src="examplePic" placeholder="color"></Picture>
+  <Picture :src="examplePic" placeholder="color" @load="onLoad"></Picture>
 </template>
 
 <style scoped>

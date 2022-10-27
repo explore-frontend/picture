@@ -83,6 +83,15 @@ const isSafari = getBrowserName() === 'Safari';
 onMounted(() => {
   safariSrc.value = lastSource.value.src;
 });
+
+const emit = defineEmits<{
+  (event: 'load', ev: Event): void;
+}>();
+
+function handleLoad(ev: Event) {
+  emit('load', ev);
+  loaded.value = true;
+}
 </script>
 
 <script lang="ts">
@@ -102,7 +111,7 @@ export default {
         v-bind="{ ...lastSource, ...$attrs }"
         :src="isSafari ? safariSrc : lastSource.src"
         :srcset="isSafari ? safariSrc : lastSource.src"
-        @load="loaded = true"
+        @load="handleLoad"
       />
     </picture>
   </div>
