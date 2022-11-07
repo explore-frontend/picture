@@ -86,8 +86,8 @@ import examplePic from './components/example.jpg?preset=modern';
 ```ts
 interface PictureProp {
   src: ImgHTMLAttributes[];
-  // 默认是empty color 会展示一个渐变色块的 loading 效果，加上 fade-in 的加载成功的渐变
-  placeholder?: 'empty' | 'color';
+  // 默认是empty。 color 会展示一个渐变色块的 loading 效果，加上 fade-in 的加载成功的渐变效果。
+  placeholder: 'empty' | 'color';
 }
 ```
 
