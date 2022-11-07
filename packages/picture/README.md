@@ -50,26 +50,9 @@ declare module '*?preset=modern' {
 }
 ```
 
-### 安装依赖
-
-`pnpm add @kwai-explore/picture`
-
 ### 在代码中使用
 
-> Picture 组件接受的属性跟 `img` 相同
-
-```vue
-<script setup lang="ts">
-import Picture from '@kwai-explore/picture';
-import examplePic from './components/example.jpg?preset=modern';
-</script>
-
-<template>
-  <Picture :src="examplePic"></Picture>
-</template>
-```
-
-数据不能用插件生成时（比如接口种的数据），样例 `src` 属性是(注意顺序)
+> Picture 组件接受的属性跟 `img` 相同，唯一的例外是 `src` 接收一个数组，一个例子是
 
 ```json
   [{
@@ -85,12 +68,25 @@ import examplePic from './components/example.jpg?preset=modern';
   ]
 ```
 
+在我们配置好 `vite-plugin-image-presets` 之后，可以直接在 import 图片的语句后面加一个 query，产出的数据就是上面需要的格式。
+
+```vue
+<script setup lang="ts">
+import Picture from '@kwai-explore/picture';
+import examplePic from './components/example.jpg?preset=modern';
+</script>
+
+<template>
+  <Picture :src="examplePic"></Picture>
+</template>
+```
+
 完整支持的属性
 
 ```ts
 interface PictureProp {
   src: ImgHTMLAttributes[];
-  // color 会展示一个渐变色块的 loading 效果，加上 fade-in 的加载成功的渐变
+  // 默认是empty color 会展示一个渐变色块的 loading 效果，加上 fade-in 的加载成功的渐变
   placeholder?: 'empty' | 'color';
 }
 ```
