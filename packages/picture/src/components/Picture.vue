@@ -101,20 +101,18 @@ export default {
 </script>
 
 <template>
-  <div
+  <picture
     class="image-container"
     :class="{ loaded: loaded, 'placeholder-player': placeholder === 'color' }"
   >
-    <picture>
-      <source v-for="(attrs, index) in sources" :key="index" v-bind="attrs" />
-      <img
-        v-bind="{ ...lastSource, ...$attrs }"
-        :src="isSafari ? safariSrc : lastSource.src"
-        :srcset="isSafari ? safariSrc : lastSource.src"
-        @load="handleLoad"
-      />
-    </picture>
-  </div>
+    <source v-for="(attrs, index) in sources" :key="index" v-bind="attrs" />
+    <img
+      v-bind="{ ...lastSource, ...$attrs }"
+      :src="isSafari ? safariSrc : lastSource.src"
+      :srcset="isSafari ? safariSrc : lastSource.src"
+      @load="handleLoad"
+    />
+  </picture>
 </template>
 
 <style scoped>
