@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue-demi';
+import { computed, onMounted, ref, isVue2 } from 'vue-demi';
 // TODO: 封装 provider 来应对不同的接口
 
 // https://github.com/vuejs/core runtime-dom.d.ts
@@ -110,6 +110,7 @@ export default {
       v-bind="{ ...lastSource, ...$attrs }"
       :src="isSafari ? safariSrc : lastSource.src"
       :srcset="isSafari ? safariSrc : lastSource.src"
+      v-on="isVue2 ? $listeners : {}"
       @load="handleLoad"
     />
   </picture>

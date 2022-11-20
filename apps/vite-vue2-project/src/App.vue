@@ -11,6 +11,9 @@ function changePic(pic: ImgHTMLAttributes[]) {
     // @ts-expect-error
     activePic.value = pic;
 }
+function onClick(e: Event) {
+    console.log(e);
+}
 </script>
 
 <template>
@@ -27,7 +30,8 @@ function changePic(pic: ImgHTMLAttributes[]) {
                 </nav>
             </div>
         </header>
-        <Picture :src="activePic"></Picture>
+        <Picture @click="onClick" placeholder="color" :src="activePic" img-class="picture1" :class="{ picture2: true }"></Picture>
+        <Picture @click.native="onClick" :src="garden2Pic"></Picture>
         <button @click="changePic(garden1Pic)">切换图片1</button>
         <button @click="changePic(garden2Pic)">切换图片2</button>
         <button @click="activePic = []">切换成空数组</button>
@@ -129,5 +133,12 @@ nav a:first-of-type {
         padding: 10px 0;
         margin-top: 20px;
     }
+}
+.picture1 {
+    object-fit: contain;
+}
+.picture2 {
+    object-position: 0;
+    width: 100px;
 }
 </style>
