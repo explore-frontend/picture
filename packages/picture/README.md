@@ -44,23 +44,20 @@ import imagePresets, { formatPreset } from 'vite-plugin-image-presets';
 这里的文档需要换一下：理论上应该标记的是自己生成的类型
 
 ```ts
-export type SourceOption = {
-    type: string;
-    srcset: string;
-};
-export type ImgOption = {
-    src: string;
-    // 这下面的属性需要与 vite config 里的 formatPreset 配置同步修改
-    loading: 'lazy';
-};
-
-export type PictureOption = [...SourceOption[], ImgOption];
-
 declare module '*?preset=modern' {
-  const src: import('vue').ImgHTMLAttributes[];
-  // vue2.7 换成：
-  // const src: import('vue/types/jsx').ImgHTMLAttributes[];
-  export default src;
+    type SourceOption = {
+        type: string;
+        srcset: string;
+    };
+    type ImgOption = {
+        src: string;
+        // 这下面的属性需要与 vite config 里的 formatPreset 配置同步修改
+        loading: 'lazy';
+    };
+    type PictureOption = [...SourceOption[], ImgOption];
+
+    const src: PictureOption;
+    export default src;
 }
 ```
 
