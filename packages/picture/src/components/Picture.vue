@@ -2,6 +2,23 @@
 import { computed, onMounted, ref, isVue2 } from 'vue-demi';
 // TODO: 封装 provider 来应对不同的接口
 
+// TODO 我要不要考虑直接废弃之前的兼容，如果用新的格式能完全实现同样的功能的话(新的格式的问题是缺少顺序)
+// vite-imagetools 产出的picture数据
+
+type PictureOption = {
+  fallback: {
+    src: string;
+    w?: number;
+  };
+  // avif: xxx.avif, webp: xx.webp
+  sources: {
+    [key: string]: {
+      src: string;
+      w?: number;
+    };
+  }[];
+};
+
 // https://github.com/vuejs/core runtime-dom.d.ts
 // 为了同时在 vue2 和 vue3 里用，先把不兼容的部分 copy 出来简化
 type Numberish = number | string;
@@ -15,12 +32,13 @@ interface ImgHTMLAttributes {
   srcset?: string;
   usemap?: string;
   width?: Numberish;
+  type?: string;
 }
 
 // 这里的属性其实也有点奇怪...理论上大部分只需要放在最后一个就可以了
 // 其实跟生产端不太一样
 interface PictureProp {
-  src: ImgHTMLAttributes[];
+  src: PictureOption | ImgHTMLAttributes[];
   // color 会展示一个渐变色块的 loading 效果，加上 fade-in 的加载成功的渐变
   placeholder?: 'empty' | 'color';
 }
@@ -50,15 +68,6 @@ function getBrowserName() {
 const props = withDefaults(defineProps<PictureProp>(), {
   placeholder: 'empty',
 });
-
-// https://github.com/ElMassimo/iles/blob/main/packages/images/src/Picture.vue
-const allSources = computed(() => props.src);
-const sources = computed(() => allSources.value.slice(0, -1));
-const lastSource = computed(() => {
-  const res = allSources.value[allSources.value.length - 1];
-  assertNotNil(res);
-  return res;
-});
 function isNotNil<T>(x: T): x is NonNullable<T> {
   return x != null;
 }
@@ -68,6 +77,25 @@ function assertNotNil<T>(v: T, message?: string): asserts v is NonNullable<T> {
     throw new Error(message ?? 'Must not be null or undefined');
   }
 }
+const allSources = computed(() => props.src);
+const sources = computed<{srcset?: string; type?: string;}[]>(() =>
+  'fallback' in allSources.value
+    ? Object.entries(allSources.value.sources).map(([key, val]) => {
+      return {
+        type: `image/${key}`,
+        srcset: val[0]?.src,
+      }
+    })
+    : allSources.value.slice(0, -1),
+);
+const lastSource = computed(() => {
+  const res =
+    'fallback' in allSources.value
+      ? allSources.value.fallback
+      : allSources.value.at(-1);
+  assertNotNil(res);
+  return res;
+});
 
 const bgColors = ['#A7D2CB', '#874C62', '#C98474', '#F2D388'];
 const lightenColors = ['#dcedea', '#d4b2bf', '#e9cec7', '#faedcf'];
