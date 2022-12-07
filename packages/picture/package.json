@@ -1,13 +1,14 @@
 {
   "name": "@kwai-explore/picture.vue",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "rm -rf dist/* && cp ./src/components/Picture.vue dist",
     "type-check": "vue-tsc --noEmit",
     "preview": "vite preview",
-    "build:example": "vite build -c vite-example.config.ts"
+    "build:example": "vite build -c vite-example.config.ts",
+    "prepublishOnly": "pnpm build"
   },
   "dependencies": {
     "vue-demi": "^0.13.11"
