@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, isVue2 } from 'vue-demi';
+
+export type SourceOption = {
+  type: string;
+  srcset: string;
+};
+export type ImgOption = {
+  src: string;
+} & SimpleImgHTMLAttributes;
+
 // TODO: 封装 provider 来应对不同的接口
-
-// TODO 我要不要考虑直接废弃之前的兼容，如果用新的格式能完全实现同样的功能的话(新的格式的问题是缺少顺序)
-// vite-imagetools 产出的picture数据
-
-type PictureOption = {
-  fallback: {
-    src: string;
-    w?: number;
-  };
+/** vite-imagetools 风格的 picture 数据格式 */
+export type ImageToolsPictureOption = {
+  fallback: ImgOption & {w?: number}
   // avif: xxx.avif, webp: xx.webp
   sources: {
     [key: string]: {
@@ -19,10 +22,13 @@ type PictureOption = {
   }[];
 };
 
-// https://github.com/vuejs/core runtime-dom.d.ts
-// 为了同时在 vue2 和 vue3 里用，先把不兼容的部分 copy 出来简化
-type Numberish = number | string;
-interface ImgHTMLAttributes {
+
+/** image-prest 风格的 picture 数据格式 */
+export type ImagePresetPictureOption = [...SourceOption[], ImgOption];
+
+export type Numberish = number | string;
+// todo 以后只支持 vue3 的时候就可以换成vue提供的类型了
+export interface SimpleImgHTMLAttributes {
   alt?: string;
   crossorigin?: 'anonymous' | 'use-credentials' | '';
   decoding?: 'async' | 'auto' | 'sync';
@@ -35,10 +41,12 @@ interface ImgHTMLAttributes {
   type?: string;
 }
 
+export type PictureOption = ImagePresetPictureOption | ImageToolsPictureOption;
+
 // 这里的属性其实也有点奇怪...理论上大部分只需要放在最后一个就可以了
 // 其实跟生产端不太一样
 interface PictureProp {
-  src: PictureOption | ImgHTMLAttributes[];
+  src: PictureOption;
   // color 会展示一个渐变色块的 loading 效果，加上 fade-in 的加载成功的渐变
   placeholder?: 'empty' | 'color';
 }
@@ -94,7 +102,7 @@ const lastSource = computed(() => {
       ? allSources.value.fallback
       : allSources.value.at(-1);
   assertNotNil(res);
-  return res;
+  return res as ImgOption;
 });
 
 const bgColors = ['#A7D2CB', '#874C62', '#C98474', '#F2D388'];

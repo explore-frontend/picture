@@ -5,10 +5,10 @@ import '@/assets/base.css';
 import garden1Pic from './assets/Garden.png?preset=modern';
 import garden2Pic from './assets/Garden2.jpeg?preset=modern';
 import { ref } from 'vue';
-import type { ImgHTMLAttributes } from 'vue/types/jsx';
-const activePic = ref<ImgHTMLAttributes[]>(garden1Pic);
-function changePic(pic: ImgHTMLAttributes[]) {
-    // @ts-expect-error
+import type {PictureOption} from '@kwai-explore/picture.vue/types';
+
+const activePic = ref<PictureOption>(garden1Pic);
+function changePic(pic: PictureOption) {
     activePic.value = pic;
 }
 function onClick(e: Event) {
@@ -30,11 +30,11 @@ function onClick(e: Event) {
                 </nav>
             </div>
         </header>
-        <Picture @click="onClick" placeholder="color" :src="activePic" img-class="picture1" :class="{ picture2: true }"></Picture>
-        <Picture @click.native="onClick" :src="garden2Pic"></Picture>
+        <Picture placeholder="color" :src="activePic" img-class="picture1" :class="{ picture2: true }" @click="onClick"></Picture>
+        <Picture :src="garden2Pic" @click.native="onClick"></Picture>
         <button @click="changePic(garden1Pic)">切换图片1</button>
         <button @click="changePic(garden2Pic)">切换图片2</button>
-        <button @click="activePic = []">切换成空数组</button>
+        <!-- <button @click="activePic = []">切换成空数组</button> -->
 
         <router-view />
     </div>
