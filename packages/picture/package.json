@@ -1,6 +1,6 @@
 {
   "name": "@kwai-explore/picture.vue",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -14,7 +14,8 @@
     "vue-demi": "^0.13.11"
   },
   "files": [
-    "dist"
+    "dist",
+    "types.d.ts"
   ],
   "module": "./dist/Picture.vue",
   "typings": "./dist/Picture.vue",
