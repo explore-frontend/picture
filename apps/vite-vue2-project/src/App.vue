@@ -4,10 +4,10 @@ import HelloWorld from '@/components/HelloWorld.vue';
 import '@/assets/base.css';
 import garden1Pic from './assets/Garden.png?preset=modern';
 import garden2Pic from './assets/Garden2.jpeg?preset=modern';
-import { ref } from 'vue';
+import { Ref, ref } from 'vue';
 import type {PictureOption} from '@kwai-explore/picture.vue/types';
 
-const activePic = ref<PictureOption>(garden1Pic);
+const activePic: Ref<PictureOption> = ref(garden1Pic);
 function changePic(pic: PictureOption) {
     activePic.value = pic;
 }

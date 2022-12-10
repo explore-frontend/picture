@@ -88,7 +88,7 @@ function assertNotNil<T>(v: T, message?: string): asserts v is NonNullable<T> {
 const allSources = computed(() => props.src);
 const sources = computed<{srcset?: string; type?: string;}[]>(() =>
   'fallback' in allSources.value
-    ? Object.entries(allSources.value.sources).map(([key, val]) => {
+    ? Object.entries(allSources.value.sources ?? {}).map(([key, val]) => {
       return {
         type: `image/${key}`,
         srcset: val[0]?.src,
