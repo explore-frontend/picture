@@ -100,7 +100,7 @@ const lastSource = computed(() => {
   const res =
     'fallback' in allSources.value
       ? allSources.value.fallback
-      : allSources.value.at(-1);
+      : allSources.value[allSources.value.length - 1];
   assertNotNil(res);
   return res as ImgOption;
 });
