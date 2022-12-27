@@ -12,14 +12,17 @@ export type ImgOption = {
 // TODO: 封装 provider 来应对不同的接口
 /** vite-imagetools 风格的 picture 数据格式 */
 export type ImageToolsPictureOption = {
-  fallback: ImgOption & {w?: number}
-  // avif: xxx.avif, webp: xx.webp
+  fallback: {
+    src: string;
+    w?: number;
+  } & SimpleImgHTMLAttributes;
+  // avif: [{src: 'xxx.avif'}], webp: [{src: xx.webp}]
   sources: {
     [key: string]: {
       src: string;
       w?: number;
-    };
-  }[];
+    }[];
+  };
 };
 
 

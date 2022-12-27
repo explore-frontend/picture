@@ -4,13 +4,13 @@ export type ImageToolsPictureOption = {
     src: string;
     w?: number;
   } & SimpleImgHTMLAttributes;
-  // avif: xxx.avif, webp: xx.webp
+  // avif: [{src: 'xxx.avif'}], webp: [{src: xx.webp}]
   sources: {
     [key: string]: {
       src: string;
       w?: number;
-    };
-  }[];
+    }[];
+  };
 };
 
 
