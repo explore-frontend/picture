@@ -54,9 +54,11 @@ interface PictureProp {
   placeholder?: 'empty' | 'color';
 }
 
-// TODO: 支持SSR/SSG
 // https://codepedia.info/detect-browser-in-javascript
 function getBrowserName() {
+  if (typeof navigator === 'undefined') {
+    return 'other';
+  }
   const agent = navigator.userAgent.toLowerCase();
   switch (
     true // case agent.indexOf("edge") > -1: return "MS Edge";
