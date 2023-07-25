@@ -5,6 +5,8 @@
     "paths": {
       "@/*": ["./src/*"]
     },
+    "declaration": true,
+    "emitDeclarationOnly": true,
     "types": []
   },
   "include": ["src/**/*", "types.d.ts"],
