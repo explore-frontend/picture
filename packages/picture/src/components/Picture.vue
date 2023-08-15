@@ -149,7 +149,10 @@ export default {
       v-bind="{ ...lastSource, ...$attrs }"
       :src="isSafari ? safariSrc : lastSource.src"
       :srcset="isSafari ? safariSrc : lastSource.src"
-      v-on="isVue2 ? $listeners : {}"
+      v-on="
+        // @ts-ignore
+        isVue2 ? $listeners : {}
+      "
       @load="handleLoad"
     />
   </picture>
