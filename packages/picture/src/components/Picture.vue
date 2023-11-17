@@ -12,6 +12,18 @@ export type ImgOption = {
 // TODO: 封装 provider 来应对不同的接口
 /** vite-imagetools 风格的 picture 数据格式 */
 export type ImageToolsPictureOption = {
+  img: {
+    src: string;
+    w?: number;
+  } & SimpleImgHTMLAttributes;
+  // avif: [{src: 'xxx.avif'}], webp: [{src: xx.webp}]
+  sources: {
+    [key: string]: string;
+  };
+};
+
+// v6.0.0以下
+export type ImageToolsPictureOptionOld = {
   fallback: {
     src: string;
     w?: number;
@@ -44,7 +56,7 @@ export interface SimpleImgHTMLAttributes {
   type?: string;
 }
 
-export type PictureOption = ImagePresetPictureOption | ImageToolsPictureOption;
+export type PictureOption = ImagePresetPictureOption | ImageToolsPictureOption | ImageToolsPictureOptionOld;
 
 // 这里的属性其实也有点奇怪...理论上大部分只需要放在最后一个就可以了
 // 其实跟生产端不太一样
@@ -90,22 +102,37 @@ function assertNotNil<T>(v: T, message?: string): asserts v is NonNullable<T> {
     throw new Error(message ?? 'Must not be null or undefined');
   }
 }
+function isImageToolsPictureOption(sources: PictureOption): sources is ImageToolsPictureOption {
+  return 'img' in sources
+}
+function isImageToolsPictureOptionOld(sources: PictureOption): sources is ImageToolsPictureOptionOld {
+  return 'fallback' in sources
+}
 const allSources = computed(() => props.src);
-const sources = computed<{srcset?: string; type?: string;}[]>(() =>
-  'fallback' in allSources.value
-    ? Object.entries(allSources.value.sources ?? {}).map(([key, val]) => {
+const sources = computed<{srcset?: string; type?: string;}[]>(() => {
+  const isImageToolsNew = isImageToolsPictureOption(allSources.value);
+  const isImageToolsOld = isImageToolsPictureOptionOld(allSources.value);
+  if (isImageToolsNew || isImageToolsOld) {
+    return Object.entries(allSources.value.sources ?? {}).map(([key, val]) => {
       return {
         type: `image/${key}`,
-        srcset: val[0]?.src,
-      }
-    })
-    : allSources.value.slice(0, -1),
-);
+        srcset: isImageToolsNew ? val : val[0]?.src,
+      };
+    });
+  }
+  return allSources.value.slice(0, -1);
+});
 const lastSource = computed(() => {
-  const res =
-    'fallback' in allSources.value
-      ? allSources.value.fallback
-      : allSources.value[allSources.value.length - 1];
+  const res = (() => {
+    if (isImageToolsPictureOption(allSources.value)) {
+      return allSources.value.img;
+    }
+    if (isImageToolsPictureOptionOld(allSources.value)) {
+      return allSources.value.fallback;
+    }
+    return allSources.value[allSources.value.length - 1];
+  })();
+
   assertNotNil(res);
   return res as ImgOption;
 });
