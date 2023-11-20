@@ -16,7 +16,6 @@ export type ImageToolsPictureOption = {
     src: string;
     w?: number;
   } & SimpleImgHTMLAttributes;
-  // avif: [{src: 'xxx.avif'}], webp: [{src: xx.webp}]
   sources: {
     [key: string]: string;
   };
