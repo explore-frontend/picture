@@ -10,17 +10,9 @@ pnpm install @kwai-explore/picture.vue
 
 ## 使用
 
-> 建议配合 [vite-plugin-image-presets](github.com/ElMassimo/vite-plugin-image-presets) 或 [vite-imagetools](https://github.com/JonasKruckenberg/imagetools/tree/main/packages/vite) 使用
+> 建议配合 [vite-imagetools](https://github.com/JonasKruckenberg/imagetools/tree/main/packages/vite) 使用
 
 ### 安装
-
-使用 `vite-plugin-image-presets` ：
-
-```shell
-pnpm add -D vite-plugin-image-presets
-```
-
-使用 `vite-imagetools` ：
 
 ```shell
 pnpm add -D vite-imagetools
@@ -29,43 +21,6 @@ pnpm add -D vite-imagetools
 ### 建议配置
 
 需要修改图片资源导出的数据结构。
-
-使用 `vite-plugin-image-presets` ：
-
-```ts
-// vite.config.ts
-
-import imagePresets, { formatPreset } from 'vite-plugin-image-presets';
-
-export default {
-  // ...
-  plugins: [
-    vue(),
-    imagePresets({
-      modern: formatPreset({
-        formats: {
-          avif: {},
-          webp: {},
-          original: {},
-        },
-        loading: 'lazy',
-      }),
-    }),
-  ],
-}
-```
-
-```ts
-// xxx.d.ts
-
-declare module '*?preset=modern' {
-  import type { ImagePresetPictureOption } from '@kwai-explore/picture.vue';
-  const src: ImagePresetPictureOption;
-  export default src;
-}
-```
-
-使用 `vite-imagetools` ：
 
 ```ts
 // vite.config.ts
@@ -102,7 +57,7 @@ declare module '*?preset=modern' {
 }
 ```
 
-在我们配置好 `vite-plugin-image-presets` 或 `vite-imagetools` 之后，可以直接在 import 图片的语句后面加一个 query ，产出的数据就是组件需要的格式。
+在我们配置好 `vite-imagetools` 之后，可以直接在 import 图片的语句后面加一个 query ，产出的数据就是组件需要的格式。
 
 ```vue
 <script setup lang="ts">
@@ -118,29 +73,29 @@ import examplePic from './components/example.jpg?preset=modern';
 ### 完整支持的属性
 
 ```ts
-interface PictureProp {
-  src: Array<ImagePresetPictureOption | ImageToolsPictureOption | ImageToolsPictureOptionOld>;
-  // 默认是empty。 color 会展示一个渐变色块的 loading 效果，加上 fade-in 的加载成功的渐变效果。
+type PictureProp = {
+  src: ImageToolsPictureOption | ImageToolsPictureOptionOld;
+  // 默认是empty
+  // color 会展示一个渐变色块的 loading 效果，加上 fade-in 的加载成功的渐变效果。
   placeholder: 'empty' | 'color';
-}
+  // Picture 接收的属性会透传给img元素
+} & ImgHTMLAttributes;
 ```
 
-### 在代码中使用
+### 在代码中传入数据
 
-Picture 组件接受的属性跟 `img` 相同，唯一的例外是 `src` 接收一个数组，一个例子是
+Picture 组件接收的 `src` 数据结构示例：
 
 ```js
-  [{
-    type: 'image/webp',
-    srcset: '/assets/logo.ffc730c4.webp 48w, /assets/logo.1f874174.webp 96w',
+{
+  sources: {
+    avif: 'xxx.avif 5304w',
+    webp: 'xxx.webp 5304w',
   },
-  {
-    type: 'image/jpeg',
-    srcset: '/assets/logo.063759b1.jpeg 48w, /assets/logo.81d93491.jpeg 96w',
-    src: '/assets/logo.81d93491.jpeg',
-    class: 'img thumb',
-    loading: 'lazy',
-  }]
+  img: {
+    src: 'xxx.jpg',
+  }
+}
 ```
 
 ### 建议添加 eslint 规则
