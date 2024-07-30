@@ -8,33 +8,38 @@
 
 ## 使用
 
-> 建议配合 (vite-plugin-image-presets) 使用
+~~建议配合 (vite-plugin-image-presets) 使用~~  
+> 0.1.0 版本后，建议配合 `vite-imagetools`
 
-### 安装 [vite-plugin-image-presets](github.com/ElMassimo/vite-plugin-image-presets)
+### 安装 [vite-imagetools](https://github.com/JonasKruckenberg/imagetools)
 
-`pnpm add -D vite-plugin-image-presets`
+`pnpm add -D vite-imagetools`
 
 ### 建议配置
 
 `vite.config.ts`
 
 ```ts
-import imagePresets, { formatPreset } from 'vite-plugin-image-presets';
+import { imagetools } from 'vite-imagetools';
+import { extname } from 'node:path';
 
 // ...
- plugins: [
-   vue(),
-   imagePresets({
-     modern: formatPreset({
-       formats: {
-         avif: {},
-         webp: {},
-         original: {},
-       },
-       loading: 'lazy',
-     }),
-   }),
- ],
+export default defineConfig({
+  plugins: [
+    // ...
+    imagetools({
+      defaultDirectives: (url) => {
+        if (url.searchParams.get('preset') === 'modern') {
+          return new URLSearchParams({
+            format: 'avif;webp;' + extname(url.pathname).slice(1),
+            as: 'picture'
+          });
+        }
+        return new URLSearchParams();
+      },
+    })
+  ],
+});
 ```
 
 根据上面的配置添加类型：
@@ -45,16 +50,29 @@ import imagePresets, { formatPreset } from 'vite-plugin-image-presets';
 
 ```ts
 declare module '*?preset=modern' {
-    type SourceOption = {
-        type: string;
-        srcset: string;
-    };
-    type ImgOption = {
-        src: string;
-        // 这下面的属性需要与 vite config 里的 formatPreset 配置同步修改
-        loading: 'lazy';
-    };
-    type PictureOption = [...SourceOption[], ImgOption];
+    type PictureOption =
+        | {
+              fallback: {
+                  src: string;
+                  w?: number;
+              } & SimpleImgHTMLAttributes;
+              sources: {
+                  [key: string]: {
+                      src: string;
+                      w?: number;
+                  }[];
+              };
+          }
+        | {
+              img: {
+                  src: string;
+                  w?: number;
+                  h?: number;
+              };
+              sources: {
+                  [key: string]: string;
+              };
+          };
 
     const src: PictureOption;
     export default src;
@@ -63,23 +81,18 @@ declare module '*?preset=modern' {
 
 ### 在代码中使用
 
-> Picture 组件接受的属性跟 `img` 相同，唯一的例外是 `src` 接收一个数组，一个例子是
+> Picture 组件接受的属性跟 `img` 相同，唯一的例外是 `src` 接收一个对象，一个例子是
 
 ```json
-  [{
-    type: 'image/webp',
-    srcset: '/assets/logo.ffc730c4.webp 48w, /assets/logo.1f874174.webp 96w',
-  },
-  {
-    type: 'image/jpeg',
-    srcset: '/assets/logo.063759b1.jpeg 48w, /assets/logo.81d93491.jpeg 96w',
-    src: '/assets/logo.81d93491.jpeg',
-    class: 'img thumb',
-    loading: 'lazy',
-  ]
+// 现在图片数据格式是这样的
+{
+  img: {src: '/@imagetools/19b8f0e7a78', w: 5304, h: 7952}
+  sources: {avif: '/@imagetools/6165531 5304w', webp: '/@imagetools/58dbfda 5304w'}
+}
+// 还兼容一种callback类型的对象
 ```
 
-在我们配置好 `vite-plugin-image-presets` 之后，可以直接在 import 图片的语句后面加一个 query，产出的数据就是上面需要的格式。
+在我们配置好 `vite-imagetools` 之后，可以直接在 import 图片的语句后面加一个 query，产出的数据就是上面需要的格式。
 
 ```vue
 <script setup lang="ts">
@@ -122,4 +135,4 @@ interface PictureProp {
 
 ## 兼容性
 
-vue >= 2.7
+vue >= 3.3
