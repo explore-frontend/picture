@@ -10,7 +10,6 @@ export default defineConfig({
     imagetools({
       defaultDirectives: (url) => {
         if (url.searchParams.get('preset') === 'modern') {
-          console.log(extname(url.pathname).slice(1));
           return new URLSearchParams({
             format: 'avif;webp;' + extname(url.pathname).slice(1),
             as: 'picture'

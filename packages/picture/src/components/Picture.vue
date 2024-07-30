@@ -138,7 +138,7 @@ function handleLoad(ev: Event) {
   loaded.value = true;
 }
 
-defineExpose({ inheritAttrs: false })
+defineOptions({ inheritAttrs: false })
 </script>
 
 <template>
