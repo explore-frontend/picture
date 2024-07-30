@@ -1,10 +1,22 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, isVue2 } from 'vue-demi';
 
-export type SourceOption = {
-  type: string;
-  srcset: string;
-};
+export type Numberish = number | string;
+// todo 以后只支持 vue3 的时候就可以换成vue提供的类型了
+export interface SimpleImgHTMLAttributes {
+  alt?: string;
+  crossorigin?: 'anonymous' | 'use-credentials' | '';
+  decoding?: 'async' | 'auto' | 'sync';
+  height?: Numberish;
+  sizes?: string;
+  src?: string;
+  srcset?: string;
+  usemap?: string;
+  width?: Numberish;
+  type?: string;
+}
+
+// todo 看看这个能不能直接删了
 export type ImgOption = {
   src: string;
 } & SimpleImgHTMLAttributes;
@@ -23,36 +35,24 @@ export type ImageToolsPictureOption = {
       w?: number;
     }[];
   };
-};
-
-
-/** image-prest 风格的 picture 数据格式 */
-export type ImagePresetPictureOption = [...SourceOption[], ImgOption];
-
-export type Numberish = number | string;
-// todo 以后只支持 vue3 的时候就可以换成vue提供的类型了
-export interface SimpleImgHTMLAttributes {
-  alt?: string;
-  crossorigin?: 'anonymous' | 'use-credentials' | '';
-  decoding?: 'async' | 'auto' | 'sync';
-  height?: Numberish;
-  sizes?: string;
-  src?: string;
-  srcset?: string;
-  usemap?: string;
-  width?: Numberish;
-  type?: string;
+} |
+/**
+ * 现在的数据格式是这样的
+ * img: {src: '/@imagetools/19b8f0e7a78', w: 5304, h: 7952}
+ * sources: {avif: '/@imagetools/6165531 5304w', webp: '/@imagetools/58dbfda 5304w'}
+ */
+{
+  img: {
+    src: string;
+    w?: number;
+    h?: number;
+  };
+  sources: {
+    [key: string]: string;
+  };
 }
 
-export type PictureOption = ImagePresetPictureOption | ImageToolsPictureOption;
-
-// 这里的属性其实也有点奇怪...理论上大部分只需要放在最后一个就可以了
-// 其实跟生产端不太一样
-interface PictureProp {
-  src: PictureOption;
-  // color 会展示一个渐变色块的 loading 效果，加上 fade-in 的加载成功的渐变
-  placeholder?: 'empty' | 'color';
-}
+export type PictureOption = ImageToolsPictureOption;
 
 // https://codepedia.info/detect-browser-in-javascript
 function getBrowserName() {
@@ -78,7 +78,13 @@ function getBrowserName() {
   }
 }
 
-const props = withDefaults(defineProps<PictureProp>(), {
+// 这里的属性其实也有点奇怪...理论上大部分只需要放在最后一个就可以了
+// 其实跟生产端不太一样
+const props = withDefaults(defineProps<{
+  src: PictureOption;
+  // color 会展示一个渐变色块的 loading 效果，加上 fade-in 的加载成功的渐变
+  placeholder?: 'empty' | 'color';
+}>(), {
   placeholder: 'empty',
 });
 function isNotNil<T>(x: T): x is NonNullable<T> {
@@ -91,21 +97,19 @@ function assertNotNil<T>(v: T, message?: string): asserts v is NonNullable<T> {
   }
 }
 const allSources = computed(() => props.src);
-const sources = computed<{srcset?: string; type?: string;}[]>(() =>
-  'fallback' in allSources.value
-    ? Object.entries(allSources.value.sources ?? {}).map(([key, val]) => {
-      return {
-        type: `image/${key}`,
-        srcset: val[0]?.src,
-      }
-    })
-    : allSources.value.slice(0, -1),
+const sources = computed<{srcset?: string; type?: string;}[]>(() => 'fallback' in allSources.value
+  ? Object.entries(allSources.value.sources ?? {}).map(
+    ([k, v]) => ({ type: `image/${k}`, srcset: v[0]?.src })
+  )
+  : Object.entries(allSources.value.sources).map(([k, v]) => ({type: `image/${k}`, srcset: v}))
 );
+
 const lastSource = computed(() => {
-  const res =
-    'fallback' in allSources.value
-      ? allSources.value.fallback
-      : allSources.value[allSources.value.length - 1];
+
+  const res = 'fallback' in allSources.value
+    ? allSources.value.fallback
+    : allSources.value.img
+  
   assertNotNil(res);
   return res as ImgOption;
 });
@@ -133,12 +137,8 @@ function handleLoad(ev: Event) {
   emit('load', ev);
   loaded.value = true;
 }
-</script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-};
+defineExpose({ inheritAttrs: false })
 </script>
 
 <template>

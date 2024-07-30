@@ -1,20 +1,23 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import imagePresets, { formatPreset } from 'vite-plugin-image-presets';
+import { imagetools } from 'vite-imagetools';
+import { extname } from 'node:path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
-    imagePresets({
-      modern: formatPreset({
-        formats: {
-          avif: {},
-          webp: {},
-          original: {},
-        },
-        loading: 'lazy',
-      }),
-    }),
+    imagetools({
+      defaultDirectives: (url) => {
+        if (url.searchParams.get('preset') === 'modern') {
+          console.log(extname(url.pathname).slice(1));
+          return new URLSearchParams({
+            format: 'avif;webp;' + extname(url.pathname).slice(1),
+            as: 'picture'
+          });
+        }
+        return new URLSearchParams();
+      },
+    })
   ],
 });
