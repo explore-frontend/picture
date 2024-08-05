@@ -50,32 +50,24 @@ export default defineConfig({
 
 ```ts
 declare module '*?preset=modern' {
-    type PictureOption =
-        | {
-              fallback: {
-                  src: string;
-                  w?: number;
-              } & SimpleImgHTMLAttributes;
-              sources: {
-                  [key: string]: {
-                      src: string;
-                      w?: number;
-                  }[];
-              };
-          }
-        | {
-              img: {
-                  src: string;
-                  w?: number;
-                  h?: number;
-              };
-              sources: {
-                  [key: string]: string;
-              };
-          };
 
-    const src: PictureOption;
-    export default src;
+  interface PictureOption {
+    sources: Record<string, string>;
+    img: {
+      src: string;
+      w: number;
+      h: number;
+    }
+  }
+
+  const src: PictureOption;
+  export default src;
+}
+
+// 组件也导出了类型，可以直接导入（推荐）
+declare module '*?preset=modern' {
+  const src: import('@kwai-explore/picture.vue/types').PictureOption;
+  export default src;
 }
 ```
 
@@ -89,7 +81,6 @@ declare module '*?preset=modern' {
   img: {src: '/@imagetools/19b8f0e7a78', w: 5304, h: 7952}
   sources: {avif: '/@imagetools/6165531 5304w', webp: '/@imagetools/58dbfda 5304w'}
 }
-// 还兼容一种callback类型的对象
 ```
 
 在我们配置好 `vite-imagetools` 之后，可以直接在 import 图片的语句后面加一个 query，产出的数据就是上面需要的格式。

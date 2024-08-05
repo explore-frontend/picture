@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, isVue2 } from 'vue-demi';
-import type { ImgOption, ImageToolsPictureOption } from './Picture.vue.d.ts'
-
-
-export type PictureOption = ImageToolsPictureOption;
+import type { ImgOption, PictureOption } from './Picture'
 
 /**
  * 获取浏览器名称
