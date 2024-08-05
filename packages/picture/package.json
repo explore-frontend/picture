@@ -14,8 +14,7 @@
     "vue-demi": "^0.14.10"
   },
   "files": [
-    "dist",
-    "types.d.ts"
+    "dist"
   ],
   "module": "./dist/Picture.vue",
   "typings": "./dist/Picture.vue",

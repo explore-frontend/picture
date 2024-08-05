@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, isVue2 } from 'vue-demi';
-import type { ImgOption, PictureOption } from './Picture'
+import type { ImgOption, PictureProp,  } from './Picture.vue.d'
 
 /**
  * 获取浏览器名称
@@ -32,11 +32,7 @@ function getBrowserName() {
 
 // 这里的属性其实也有点奇怪...理论上大部分只需要放在最后一个就可以了
 // 其实跟生产端不太一样
-const props = withDefaults(defineProps<{
-  src: PictureOption;
-  // color 会展示一个渐变色块的 loading 效果，加上 fade-in 的加载成功的渐变
-  placeholder?: 'empty' | 'color';
-}>(), {
+const props = withDefaults(defineProps<PictureProp>(), {
   placeholder: 'empty',
 });
 function isNotNil<T>(x: T): x is NonNullable<T> {

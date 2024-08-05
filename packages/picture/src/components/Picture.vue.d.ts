@@ -51,13 +51,13 @@ export declare type ImageToolsPictureOption = {
 /**
  * 组件需要用到两个类型
  */
-export type PictureOption = ImageToolsPictureOption
+export type PictureOption = Picture
 
 /**
  * 组件入参
  */
 export interface PictureProp {
-    src: PictureOption;
+    src: ImageToolsPictureOption;
     /** color 会展示一个渐变色块的 loading 效果，加上 fade-in 的加载成功的渐变 */ 
     placeholder?: 'empty' | 'color';
   }
