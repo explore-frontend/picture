@@ -23,8 +23,7 @@
     ".": {
       "types": "./dist/Picture.d.ts",
       "import": "./dist/Picture.vue"
-    },
-    "./types": "./types.d.ts"
+    }
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.24.0",
