@@ -1,60 +1,12 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, isVue2 } from 'vue-demi';
+import type { ImgOption, PictureProp,  } from './Picture.vue.d'
 
-export type Numberish = number | string;
-// todo 以后只支持 vue3 的时候就可以换成vue提供的类型了
-export interface SimpleImgHTMLAttributes {
-  alt?: string;
-  crossorigin?: 'anonymous' | 'use-credentials' | '';
-  decoding?: 'async' | 'auto' | 'sync';
-  height?: Numberish;
-  sizes?: string;
-  src?: string;
-  srcset?: string;
-  usemap?: string;
-  width?: Numberish;
-  type?: string;
-}
-
-// todo 看看这个能不能直接删了
-export type ImgOption = {
-  src: string;
-} & SimpleImgHTMLAttributes;
-
-// TODO: 封装 provider 来应对不同的接口
-/** vite-imagetools 风格的 picture 数据格式 */
-export type ImageToolsPictureOption = {
-  fallback: {
-    src: string;
-    w?: number;
-  } & SimpleImgHTMLAttributes;
-  // avif: [{src: 'xxx.avif'}], webp: [{src: xx.webp}]
-  sources: {
-    [key: string]: {
-      src: string;
-      w?: number;
-    }[];
-  };
-} |
 /**
- * 现在的数据格式是这样的
- * img: {src: '/@imagetools/19b8f0e7a78', w: 5304, h: 7952}
- * sources: {avif: '/@imagetools/6165531 5304w', webp: '/@imagetools/58dbfda 5304w'}
+ * 获取浏览器名称
+ * @see https://codepedia.info/detect-browser-in-javascript
+ * @returns 浏览器名称
  */
-{
-  img: {
-    src: string;
-    w?: number;
-    h?: number;
-  };
-  sources: {
-    [key: string]: string;
-  };
-}
-
-export type PictureOption = ImageToolsPictureOption;
-
-// https://codepedia.info/detect-browser-in-javascript
 function getBrowserName() {
   if (typeof navigator === 'undefined') {
     return 'other';
@@ -80,11 +32,7 @@ function getBrowserName() {
 
 // 这里的属性其实也有点奇怪...理论上大部分只需要放在最后一个就可以了
 // 其实跟生产端不太一样
-const props = withDefaults(defineProps<{
-  src: PictureOption;
-  // color 会展示一个渐变色块的 loading 效果，加上 fade-in 的加载成功的渐变
-  placeholder?: 'empty' | 'color';
-}>(), {
+const props = withDefaults(defineProps<PictureProp>(), {
   placeholder: 'empty',
 });
 function isNotNil<T>(x: T): x is NonNullable<T> {

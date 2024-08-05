@@ -14,17 +14,15 @@
     "vue-demi": "^0.14.10"
   },
   "files": [
-    "dist",
-    "types.d.ts"
+    "dist"
   ],
   "module": "./dist/Picture.vue",
   "typings": "./dist/Picture.vue",
   "exports": {
     ".": {
-      "types": "./dist/Picture.vue.d.ts",
+      "types": "./dist/Picture.d.ts",
       "import": "./dist/Picture.vue"
-    },
-    "./types": "./types.d.ts"
+    }
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.24.0",
