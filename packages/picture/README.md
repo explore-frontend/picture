@@ -65,8 +65,8 @@ declare module '*?preset=modern' {
 }
 
 // 组件也导出了类型，可以直接导入（推荐）
-declare module '*?preset=modern' {
-  const src: import('@kwai-explore/picture.vue/types').PictureOption;
+declare module "*?preset=modern" {
+  const src: import("@kwai-explore/picture.vue/dist/Picture").PictureOption;
   export default src;
 }
 ```

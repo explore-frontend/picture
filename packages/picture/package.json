@@ -21,7 +21,7 @@
   "typings": "./dist/Picture.vue",
   "exports": {
     ".": {
-      "types": "./dist/Picture.vue.d.ts",
+      "types": "./dist/Picture.d.ts",
       "import": "./dist/Picture.vue"
     },
     "./types": "./types.d.ts"
