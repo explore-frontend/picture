@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import imagePresets, { formatPreset } from 'vite-plugin-image-presets';
 import dts from 'vite-plugin-dts';
 import libCss from 'vite-plugin-libcss';
 
@@ -19,16 +18,6 @@ export default defineConfig({
   plugins: [
     vue(),
     libCss(),
-    imagePresets({
-      modern: formatPreset({
-        formats: {
-          avif: {},
-          webp: {},
-          original: {},
-        },
-        loading: 'lazy',
-      }),
-    }),
     dts(),
   ],
 });
