@@ -11,7 +11,7 @@
 
 ### 安装配置插件（推荐）
 
-> Tip: 以前用的是 image-prest 插件，Picture组件也兼容这个插件生成图片对象类型，但是新项目推荐使用 vite-imagetools
+> Tip: 以前用的是 image-prest 现在使用 vite-imagetools 插件
 
 1. 建议配合 [vite-imagetools](https://github.com/JonasKruckenberg/imagetools) 使用
 `pnpm add -D vite-imagetools`
@@ -41,11 +41,12 @@ export default defineConfig({
 
 3. 根据上面的配置添加全局类型： `vite-env.d.ts`
 
-这里的类型就是图片转换插件的输出类型，Picture组件已经定义好了
+这里的类型就是图片转换插件的输出类型，Picture组件已经定义好了  
+这一步是避免ts报错
 
 ```ts
 declare module "*?preset=modern" {
-  const src: import("@kwai-explore/picture.vue").PictureOption;
+  const src: import('@kwai-explore/picture.vue/types').ImageToolsPictureOption;
   export default src;
 }
 ```
@@ -62,14 +63,15 @@ import examplePic from './components/example.jpg?preset=modern';
   <PictureComp :src="examplePic" />
 </template>
 ```
-Picture 组件接受的属性跟 `img` 相同，唯一的例外是 `src` 接收一个对象，比如：
+
+Picture 组件接受的属性跟 `img` 相同，唯一的例外是 `src` 接收一个对象，如：
 ```json
 { // vite-imagetools 生成的图片对象
   img: {src: '/@imagetools/19b8f0e7a78', w: 5304, h: 7952}
   sources: {avif: '/@imagetools/6165531 5304w', webp: '/@imagetools/58dbfda 5304w'}
 }
 ```
-根据上面配置好 `vite-imagetools` 后，import 图片时后面加一个query：`?preset=modern`，产出的数据就是上面需要的格式。
+根据上面配置好 `vite-imagetools` 后，import 图片时后面加一个query：`?preset=modern`，产出的数据就是这样的。
 
 > 这里取名叫 PictureComp ，是为了避免编辑器搞混 picture 标签（html自带的）
 
@@ -77,10 +79,23 @@ Picture 组件接受的属性跟 `img` 相同，唯一的例外是 `src` 接收�
 
 ```ts
 interface PictureProp {
-  src: ImgHTMLAttributes[];
+  src: PictureOption;
   // 默认是empty。 color 会展示一个渐变色块的 loading 效果，加上 fade-in 的加载成功的渐变效果。
   placeholder: 'empty' | 'color';
 }
+```
+
+对外暴露了几个类型，这里解释一下：
+```ts
+export type {
+  // Picture组件 src属性接受的图片类型
+  // 其实就是 ImageToolsPictureOption | ImageTools2PictureOption,
+  PictureOption,
+  // vite-imagetools 生成的类型
+  ImageToolsPictureOption,
+  // 一种需要兼容的fallback图像类型（历史需要）
+  ImageTools2PictureOption,
+} from './dist/Picture.vue.d.ts';
 ```
 
 ### 建议添加 eslint 规则
