@@ -5,7 +5,8 @@ declare module '*.vue' {
   const component: DefineComponent<{}, {}, any>;
   export default component;
 }
+
 declare module '*?preset=modern' {
-  const src: import('@kwai-explore/picture.vue/types').PictureOption;
+  const src: import('@kwai-explore/picture.vue/types').ImageToolsPictureOption;
   export default src;
 }

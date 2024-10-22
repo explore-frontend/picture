@@ -1,60 +1,12 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, isVue2 } from 'vue-demi';
+import type { ImgOption, PictureProp } from './Picture.vue.d.ts';
 
-export type Numberish = number | string;
-// todo 以后只支持 vue3 的时候就可以换成vue提供的类型了
-export interface SimpleImgHTMLAttributes {
-  alt?: string;
-  crossorigin?: 'anonymous' | 'use-credentials' | '';
-  decoding?: 'async' | 'auto' | 'sync';
-  height?: Numberish;
-  sizes?: string;
-  src?: string;
-  srcset?: string;
-  usemap?: string;
-  width?: Numberish;
-  type?: string;
-}
-
-// todo 看看这个能不能直接删了
-export type ImgOption = {
-  src: string;
-} & SimpleImgHTMLAttributes;
-
-// TODO: 封装 provider 来应对不同的接口
-/** vite-imagetools 风格的 picture 数据格式 */
-export type ImageToolsPictureOption = {
-  fallback: {
-    src: string;
-    w?: number;
-  } & SimpleImgHTMLAttributes;
-  // avif: [{src: 'xxx.avif'}], webp: [{src: xx.webp}]
-  sources: {
-    [key: string]: {
-      src: string;
-      w?: number;
-    }[];
-  };
-} |
 /**
- * 现在的数据格式是这样的
- * img: {src: '/@imagetools/19b8f0e7a78', w: 5304, h: 7952}
- * sources: {avif: '/@imagetools/6165531 5304w', webp: '/@imagetools/58dbfda 5304w'}
+ * 获取浏览器名称
+ * @see https://codepedia.info/detect-browser-in-javascript
+ * @returns 浏览器名称
  */
-{
-  img: {
-    src: string;
-    w?: number;
-    h?: number;
-  };
-  sources: {
-    [key: string]: string;
-  };
-}
-
-export type PictureOption = ImageToolsPictureOption;
-
-// https://codepedia.info/detect-browser-in-javascript
 function getBrowserName() {
   if (typeof navigator === 'undefined') {
     return 'other';
@@ -78,38 +30,34 @@ function getBrowserName() {
   }
 }
 
-// 这里的属性其实也有点奇怪...理论上大部分只需要放在最后一个就可以了
-// 其实跟生产端不太一样
-const props = withDefaults(defineProps<{
-  src: PictureOption;
-  // color 会展示一个渐变色块的 loading 效果，加上 fade-in 的加载成功的渐变
-  placeholder?: 'empty' | 'color';
-}>(), {
-  placeholder: 'empty',
-});
-function isNotNil<T>(x: T): x is NonNullable<T> {
-  return x != null;
-}
-
 function assertNotNil<T>(v: T, message?: string): asserts v is NonNullable<T> {
-  if (!isNotNil(v)) {
+  if (v == null) {
     throw new Error(message ?? 'Must not be null or undefined');
   }
 }
-const allSources = computed(() => props.src);
-const sources = computed<{srcset?: string; type?: string;}[]>(() => 'fallback' in allSources.value
-  ? Object.entries(allSources.value.sources ?? {}).map(
-    ([k, v]) => ({ type: `image/${k}`, srcset: v[0]?.src })
-  )
-  : Object.entries(allSources.value.sources).map(([k, v]) => ({type: `image/${k}`, srcset: v}))
+
+// 这里的属性其实也有点奇怪...理论上大部分只需要放在最后一个就可以了
+// 其实跟生产端不太一样
+const props = withDefaults(defineProps<PictureProp>(), {
+  placeholder: 'empty',
+});
+
+/** 插件会生成多种格式的图片，放入source中，picture标签会选择最优图像显示 */
+const sources = computed<{ srcset?: string; type?: string }[]>(() =>
+  'fallback' in props.src
+    ? Object.entries(props.src.sources ?? {}).map(([k, v]) => ({
+        type: `image/${k}`,
+        srcset: v[0]?.src,
+      }))
+    : Object.entries(props.src.sources).map(([k, v]) => ({
+        type: `image/${k}`,
+        srcset: v,
+      })),
 );
 
+/** 返回图片对象里面主要图片，放入img中，作为兜底图像 */
 const lastSource = computed(() => {
-
-  const res = 'fallback' in allSources.value
-    ? allSources.value.fallback
-    : allSources.value.img
-  
+  const res = 'fallback' in props.src ? props.src.fallback : props.src.img;
   assertNotNil(res);
   return res as ImgOption;
 });
@@ -138,7 +86,7 @@ function handleLoad(ev: Event) {
   loaded.value = true;
 }
 
-defineOptions({ inheritAttrs: false })
+defineOptions({ inheritAttrs: false });
 </script>
 
 <template>

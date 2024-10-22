@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import Picture from '@kwai-explore/picture.vue';
-import examplePic from './assets/example.jpg?preset=modern';
+import PictureComp from "@kwai-explore/picture.vue";
+import examplePic from "./assets/example.jpg?preset=modern";
+
+
 function onLoad(...args: any[]) {
-  console.log('load', ...args);
+  console.log("load", ...args);
 }
 function onClick(e: Event) {
   console.log(e);
@@ -12,13 +14,13 @@ function onClick(e: Event) {
 <template>
   <div>vue3 demo</div>
   <!-- <Picture :src="examplePic"></Picture> -->
-  <Picture
+  <PictureComp
     :src="examplePic"
     placeholder="color"
     @load="onLoad"
     class="img"
     @click="onClick"
-  ></Picture>
+  />
 </template>
 
 <style scoped>
