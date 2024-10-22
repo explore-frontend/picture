@@ -30,36 +30,34 @@ function getBrowserName() {
   }
 }
 
+function assertNotNil<T>(v: T, message?: string): asserts v is NonNullable<T> {
+  if (v == null) {
+    throw new Error(message ?? 'Must not be null or undefined');
+  }
+}
+
 // 这里的属性其实也有点奇怪...理论上大部分只需要放在最后一个就可以了
 // 其实跟生产端不太一样
 const props = withDefaults(defineProps<PictureProp>(), {
   placeholder: 'empty',
 });
 
-function assertNotNil<T>(v: T, message?: string): asserts v is NonNullable<T> {
-  if (v == null) {
-    throw new Error(message ?? 'Must not be null or undefined');
-  }
-}
-const allSources = computed(() => props.src);
+/** 插件会生成多种格式的图片，放入source中，picture标签会选择最优图像显示 */
 const sources = computed<{ srcset?: string; type?: string }[]>(() =>
-  'fallback' in allSources.value
-    ? Object.entries(allSources.value.sources ?? {}).map(([k, v]) => ({
+  'fallback' in props.src
+    ? Object.entries(props.src.sources ?? {}).map(([k, v]) => ({
         type: `image/${k}`,
         srcset: v[0]?.src,
       }))
-    : Object.entries(allSources.value.sources).map(([k, v]) => ({
+    : Object.entries(props.src.sources).map(([k, v]) => ({
         type: `image/${k}`,
         srcset: v,
       })),
 );
 
+/** 返回图片对象里面主要图片，放入img中，作为兜底图像 */
 const lastSource = computed(() => {
-  const res =
-    'fallback' in allSources.value
-      ? allSources.value.fallback
-      : allSources.value.img;
-
+  const res = 'fallback' in props.src ? props.src.fallback : props.src.img;
   assertNotNil(res);
   return res as ImgOption;
 });

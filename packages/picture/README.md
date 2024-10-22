@@ -55,12 +55,12 @@ declare module "*?preset=modern" {
 
 ```vue
 <script setup lang="ts">
-import PictureComp from '@kwai-explore/picture.vue';
+import Picture from '@kwai-explore/picture.vue';
 import examplePic from './components/example.jpg?preset=modern';
 </script>
 
 <template>
-  <PictureComp :src="examplePic" />
+  <Picture :src="examplePic" />
 </template>
 ```
 
@@ -72,8 +72,6 @@ Picture 组件接受的属性跟 `img` 相同，唯一的例外是 `src` 接收�
 }
 ```
 根据上面配置好 `vite-imagetools` 后，import 图片时后面加一个query：`?preset=modern`，产出的数据就是这样的。
-
-> 这里取名叫 PictureComp ，是为了避免编辑器搞混 picture 标签（html自带的）
 
 ## Picture Props
 
