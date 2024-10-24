@@ -2,7 +2,6 @@
 import PictureComp from "@kwai-explore/picture.vue";
 import examplePic from "./assets/example.jpg?preset=modern";
 
-
 function onLoad(...args: any[]) {
   console.log("load", ...args);
 }

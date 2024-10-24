@@ -1,6 +1,51 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import type { ImgOption, PictureProp } from './Picture.vue.d.ts';
+import type { PictureProp } from './Picture.vue.d.ts';
+
+const bgColors = ['#A7D2CB', '#874C62', '#C98474', '#F2D388'];
+const lightenColors = ['#dcedea', '#d4b2bf', '#e9cec7', '#faedcf'];
+const bgIndex = Math.floor(Math.random() * bgColors.length);
+const bgColor = bgColors[bgIndex];
+const bgColorLight = lightenColors[bgIndex];
+
+const props = withDefaults(defineProps<PictureProp>(), {
+  placeholder: 'empty',
+});
+const emit = defineEmits<{ (event: 'load', ev: Event): void }>();
+defineOptions({ inheritAttrs: false });
+
+/** 插件会生成多种格式的图片，放入source中，picture标签会选择最优图像显示 */
+const sources = computed<{ srcset?: string; type?: string }[]>(() =>
+  'fallback' in props.src
+    ? Object.entries(props.src.sources ?? {}).map(([k, v]) => ({
+        type: `image/${k}`,
+        srcset: v[0]?.src,
+      }))
+    : Object.entries(props.src.sources).map(([k, v]) => ({
+        type: `image/${k}`,
+        srcset: v,
+      })),
+);
+
+/** 返回图片对象里面主要图片，放入img中，作为兜底图像 */
+const lastSource = computed(() => {
+  const res = 'fallback' in props.src ? props.src.fallback : props.src.img;
+  assertNotNil(res);
+  return res;
+});
+
+const safariSrc = ref();
+const isSafari = getBrowserName() === 'Safari';
+// 测试过url变化时加载的图片符合预期
+onMounted(() => {
+  safariSrc.value = lastSource.value.src;
+});
+
+const loaded = ref(false);
+function handleLoad(ev: Event) {
+  emit('load', ev);
+  loaded.value = true;
+}
 
 /**
  * 获取浏览器名称
@@ -35,58 +80,6 @@ function assertNotNil<T>(v: T, message?: string): asserts v is NonNullable<T> {
     throw new Error(message ?? 'Must not be null or undefined');
   }
 }
-
-// 这里的属性其实也有点奇怪...理论上大部分只需要放在最后一个就可以了
-// 其实跟生产端不太一样
-const props = withDefaults(defineProps<PictureProp>(), {
-  placeholder: 'empty',
-});
-
-/** 插件会生成多种格式的图片，放入source中，picture标签会选择最优图像显示 */
-const sources = computed<{ srcset?: string; type?: string }[]>(() =>
-  'fallback' in props.src
-    ? Object.entries(props.src.sources ?? {}).map(([k, v]) => ({
-        type: `image/${k}`,
-        srcset: v[0]?.src,
-      }))
-    : Object.entries(props.src.sources).map(([k, v]) => ({
-        type: `image/${k}`,
-        srcset: v,
-      })),
-);
-
-/** 返回图片对象里面主要图片，放入img中，作为兜底图像 */
-const lastSource = computed(() => {
-  const res = 'fallback' in props.src ? props.src.fallback : props.src.img;
-  assertNotNil(res);
-  return res as ImgOption;
-});
-
-const bgColors = ['#A7D2CB', '#874C62', '#C98474', '#F2D388'];
-const lightenColors = ['#dcedea', '#d4b2bf', '#e9cec7', '#faedcf'];
-
-const bgIndex = Math.floor(Math.random() * bgColors.length);
-const bgColor = bgColors[bgIndex];
-const bgColorLight = lightenColors[bgIndex];
-const loaded = ref(false);
-
-const safariSrc = ref();
-const isSafari = getBrowserName() === 'Safari';
-// 测试过url变化时加载的图片符合预期
-onMounted(() => {
-  safariSrc.value = lastSource.value.src;
-});
-
-const emit = defineEmits<{
-  (event: 'load', ev: Event): void;
-}>();
-
-function handleLoad(ev: Event) {
-  emit('load', ev);
-  loaded.value = true;
-}
-
-defineOptions({ inheritAttrs: false });
 </script>
 
 <template>

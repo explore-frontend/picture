@@ -32,7 +32,7 @@ export declare type ImageTools2PictureOption = {
   fallback: {
     src: string;
     w?: number;
-  } & SimpleImgHTMLAttributes;
+  } & ImgHTMLAttributes;
   // avif: [{src: 'xxx.avif'}], webp: [{src: xx.webp}]
   sources: {
     [key: string]: {
@@ -41,22 +41,3 @@ export declare type ImageTools2PictureOption = {
     }[];
   };
 };
-
-// todo 以后只支持 vue3 的时候就可以换成vue提供的类型了
-export interface SimpleImgHTMLAttributes {
-  alt?: string;
-  crossorigin?: 'anonymous' | 'use-credentials' | '';
-  decoding?: 'async' | 'auto' | 'sync';
-  height?: number | string;
-  sizes?: string;
-  src?: string;
-  srcset?: string;
-  usemap?: string;
-  width?: number | string;
-  type?: string;
-}
-
-// todo 看看这个能不能直接删了
-export type ImgOption = {
-  src: string;
-} & SimpleImgHTMLAttributes;
