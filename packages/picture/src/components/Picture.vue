@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, isVue2 } from 'vue-demi';
+import { computed, onMounted, ref } from 'vue';
 import type { ImgOption, PictureProp } from './Picture.vue.d.ts';
 
 /**
@@ -99,10 +99,6 @@ defineOptions({ inheritAttrs: false });
       v-bind="{ ...lastSource, ...$attrs }"
       :src="isSafari ? safariSrc : lastSource.src"
       :srcset="isSafari ? safariSrc : lastSource.src"
-      v-on="
-        // @ts-ignore
-        isVue2 ? $listeners : {}
-      "
       @load="handleLoad"
     />
   </picture>

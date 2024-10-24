@@ -1,4 +1,4 @@
-import type { ImgHTMLAttributes } from 'vue-demi';
+import type { ImgHTMLAttributes } from 'vue';
 import type { Picture } from 'vite-imagetools';
 
 /**
