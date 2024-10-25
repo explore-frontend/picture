@@ -9,7 +9,7 @@
 
 ## 配置 imagetools
 
-### 安装配置插件（推荐）
+### 安装配置插件
 
 > Tip: 以前用的是 image-prest 现在使用 vite-imagetools 插件
 
@@ -45,27 +45,27 @@ export default defineConfig({
 这一步是避免ts报错
 
 ```ts
-declare module "*?preset=modern" {
-  const src: import('@kwai-explore/picture.vue/types').ImageToolsPictureOption;
+declare module '*?preset=modern' {
+  const src: import('vite-imagetools').Picture;
   export default src;
 }
 ```
 
 ## 使用 Picture
 
-```vue
+```html
 <script setup lang="ts">
 import Picture from '@kwai-explore/picture.vue';
 import examplePic from './components/example.jpg?preset=modern';
 </script>
 
 <template>
-  <Picture :src="examplePic" />
+  <Picture :src="examplePic" placeholder="color" />
 </template>
 ```
 
 Picture 组件接受的属性跟 `img` 相同，唯一的例外是 `src` 接收一个对象，如：
-```json
+```js
 { // vite-imagetools 生成的图片对象
   img: {src: '/@imagetools/19b8f0e7a78', w: 5304, h: 7952}
   sources: {avif: '/@imagetools/6165531 5304w', webp: '/@imagetools/58dbfda 5304w'}
@@ -76,28 +76,15 @@ Picture 组件接受的属性跟 `img` 相同，唯一的例外是 `src` 接收�
 ## Picture Props
 
 ```ts
-interface PictureProp {
-  src: PictureOption;
-  // 默认是empty。 color 会展示一个渐变色块的 loading 效果，加上 fade-in 的加载成功的渐变效果。
+type PictureProp = {
+  src: Picture | FallbackPictureOption;
+  /** color 会展示一个渐变色块的 loading 效果，加上 fade-in 的加载成功的渐变 */
   placeholder: 'empty' | 'color';
-}
-```
-
-对外暴露了几个类型，这里解释一下：
-```ts
-export type {
-  // Picture组件 src属性接受的图片类型
-  // 其实就是 ImageToolsPictureOption | ImageTools2PictureOption,
-  PictureOption,
-  // vite-imagetools 生成的类型
-  ImageToolsPictureOption,
-  // 一种需要兼容的fallback图像类型（历史需要）
-  ImageTools2PictureOption,
-} from './dist/Picture.vue.d.ts';
+} & Omit<ImgHTMLAttributes, 'src'>
 ```
 
 ### 建议添加 eslint 规则
-```
+```js
 'vue/no-restricted-html-elements': [
     'warn',
     {
