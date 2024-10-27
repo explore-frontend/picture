@@ -1,1 +1,1 @@
-export type * from 'vite-imagetools';
+export type * from "./dist/Picture.vue.d.ts";
