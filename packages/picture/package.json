@@ -36,7 +36,6 @@
     "prettier": "^3.3.3",
     "typescript": "^5.5.4",
     "vite": "^5.3.5",
-    "vite-imagetools": "^7.0.4",
     "vite-plugin-dts": "4.0.0-beta.1",
     "vite-plugin-libcss": "^1.1.1",
     "vue": "^3.4.34",
