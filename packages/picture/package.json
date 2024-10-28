@@ -39,6 +39,7 @@
     "vite-imagetools": "^7.0.4",
     "vite-plugin-dts": "4.0.0-beta.1",
     "vite-plugin-libcss": "^1.1.1",
+    "vue": "^3.4.34",
     "vue-tsc": "^2.0.29"
   }
 }
