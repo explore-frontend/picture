@@ -8,6 +8,9 @@ export type PictureProp = {
   placeholder?: 'empty' | 'color';
 };
 
+/** 主要推荐使用的类型，由 vite-imagetools 生成 */
+export type ImagetoolsPictureOption = Picture
+
 /** 一种需要兼容的fallback图像类型（历史需要） */
 export type FallbackPictureOption = {
   fallback: { src: string; w?: number } & ImgHTMLAttributes;
@@ -17,7 +20,7 @@ export type FallbackPictureOption = {
   };
 };
 
-export type PictureOption = Picture | FallbackPictureOption;
+export type PictureOption = ImagetoolsPictureOption | FallbackPictureOption;
 
 declare const PictureComponent: new () => {
   $props: PictureProp & Omit<ImgHTMLAttributes, 'src'>;
