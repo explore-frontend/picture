@@ -1,6 +1,6 @@
 {
   "name": "@kwai-explore/picture.vue",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,9 +9,6 @@
     "preview": "vite preview",
     "build:example": "vite build -c vite-example.config.ts",
     "prepublishOnly": "pnpm build"
-  },
-  "dependencies": {
-    "vue-demi": "^0.14.10"
   },
   "files": [
     "dist",
@@ -25,6 +22,10 @@
       "import": "./dist/Picture.vue"
     },
     "./types": "./types.d.ts"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "vue": "3.x"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.24.0",

@@ -7,6 +7,6 @@ declare module '*.vue' {
 }
 
 declare module '*?preset=modern' {
-  const src: import('@kwai-explore/picture.vue/types').ImageToolsPictureOption;
+  const src: import('vite-imagetools').Picture;
   export default src;
 }
