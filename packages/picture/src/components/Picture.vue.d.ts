@@ -1,5 +1,4 @@
 import type { ImgHTMLAttributes } from 'vue';
-import type { Picture } from 'vite-imagetools';
 
 /** Picture Props 类型 */
 export type PictureProp = {
@@ -8,8 +7,18 @@ export type PictureProp = {
   placeholder?: 'empty' | 'color';
 };
 
-/** 主要推荐使用的类型，由 vite-imagetools 生成 */
-export type ImagetoolsPictureOption = Picture
+/** 
+ * 主要推荐使用的类型，由 vite-imagetools 生成
+ * @see https://github.com/JonasKruckenberg/imagetools/blob/main/docs/interfaces/core_src.Picture.md
+ */
+export type ImagetoolsPictureOption = {
+  sources: Record<string, string>;
+  img: {
+      src: string;
+      w: number;
+      h: number;
+  };
+}
 
 /** 一种需要兼容的fallback图像类型（历史需要） */
 export type FallbackPictureOption = {
