@@ -7,7 +7,10 @@ export type PictureProp = {
   placeholder?: 'empty' | 'color';
 };
 
-/** 主要推荐使用的类型，由 vite-imagetools 生成 */
+/** 
+ * 主要推荐使用的类型，由 vite-imagetools 生成
+ * @see https://github.com/JonasKruckenberg/imagetools/blob/main/docs/interfaces/core_src.Picture.md
+ */
 export type ImagetoolsPictureOption = {
   sources: Record<string, string>;
   img: {
