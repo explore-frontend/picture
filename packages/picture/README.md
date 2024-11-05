@@ -83,6 +83,15 @@ type PictureProp = {
 } & Omit<ImgHTMLAttributes, 'src'>
 ```
 
+##  样式问题
+
+组件内部是<picture><img /></picture>，其中img直接继承父元素的所有css属性，这是为了避免使用:deep()才能给img设置样式。
+
+使用时通过class设置样式时，会同时对这两个标签生效，组件内部已经对background、border、margin、padding等样式进行了过滤。
+
+如果使用其他属性时，样式出现了和预期不符合的问题，请尝试直接使用:deep(img)，或者使用行内样式（会直接透传到img），使样式只对img标签失效。
+
+
 ### 建议添加 eslint 规则
 ```js
 'vue/no-restricted-html-elements': [

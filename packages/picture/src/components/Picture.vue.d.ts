@@ -7,18 +7,20 @@ export type PictureProp = {
   placeholder?: 'empty' | 'color';
 };
 
-/** 
+/**
  * 主要推荐使用的类型，由 vite-imagetools 生成
  * @see https://github.com/JonasKruckenberg/imagetools/blob/main/docs/interfaces/core_src.Picture.md
+ * ```js
+ * { // vite-imagetools 生成的图片对象例子
+ *   img: {src: '/@imagetools/19b8f0e7a78', w: 5304, h: 7952}
+ *   sources: {avif: '/@imagetools/6165531 5304w', webp: '/@imagetools/58dbfda 5304w'}
+ * }
+ *```
  */
 export type ImagetoolsPictureOption = {
+  img: { src: string; w: number; h: number };
   sources: Record<string, string>;
-  img: {
-      src: string;
-      w: number;
-      h: number;
-  };
-}
+};
 
 /** 一种需要兼容的fallback图像类型（历史需要） */
 export type FallbackPictureOption = {

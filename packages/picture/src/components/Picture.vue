@@ -83,13 +83,11 @@ function assertNotNil<T>(v: T, message?: string): asserts v is NonNullable<T> {
 </script>
 
 <template>
-  <picture
-    class="image-container"
-    :class="{ loaded: loaded, 'placeholder-player': placeholder === 'color' }"
-  >
+  <picture v-bind:class="$attrs.class">
     <source v-for="(attrs, index) in sources" :key="index" v-bind="attrs" />
     <img
       v-bind="{ ...lastSource, ...$attrs }"
+      :class="{ 'placeholder-player': placeholder === 'color', loaded }"
       :src="isSafari ? safariSrc : lastSource.src"
       :srcset="isSafari ? safariSrc : lastSource.src"
       @load="handleLoad"
@@ -98,12 +96,33 @@ function assertNotNil<T>(v: T, message?: string): asserts v is NonNullable<T> {
 </template>
 
 <style scoped>
-.placeholder-player {
-  animation: placeholder ease-in-out 2s infinite;
+picture {
+  display: block;
+
+  img {
+    /* 默认的属性 */
+    object-fit: cover;
+    vertical-align: top;
+    width: 100%;
+    height: 100%;
+
+    all: inherit;
+
+    /* 不能继承的属性 */
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .placeholder-player {
+    animation: placeholder ease-in-out 2s infinite; /* 加载动画 */
+    &.loaded {
+      animation: fadeIn linear 0.5s; /* 加载完成 */
+    }
+  }
 }
-.image-container img {
-  width: 100%;
-}
+
 @keyframes placeholder {
   0% {
     background-color: v-bind(bgColor);
@@ -122,11 +141,5 @@ function assertNotNil<T>(v: T, message?: string): asserts v is NonNullable<T> {
   100% {
     opacity: 100%;
   }
-}
-.placeholder-player.loaded {
-  animation: none;
-}
-.placeholder-player.loaded img {
-  animation: fadeIn linear 0.5s;
 }
 </style>

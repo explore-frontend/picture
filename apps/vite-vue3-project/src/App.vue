@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PictureComp from "@kwai-explore/picture.vue";
+import Picture from "@kwai-explore/picture.vue";
 import examplePic from "./assets/example.jpg?preset=modern";
 
 function onLoad(...args: any[]) {
@@ -12,29 +12,18 @@ function onClick(e: Event) {
 
 <template>
   <div>vue3 demo</div>
-  <!-- <Picture :src="examplePic"></Picture> -->
-  <PictureComp
+  <Picture
     :src="examplePic"
     placeholder="color"
+    class="picture"
     @load="onLoad"
-    class="img"
     @click="onClick"
   />
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vuehover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-.img {
-  object-fit: contain;
+.picture {
+  width: 100px;
+  overflow: hidden;
 }
 </style>
