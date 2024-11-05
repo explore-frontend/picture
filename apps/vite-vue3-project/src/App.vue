@@ -23,7 +23,10 @@ function onClick(e: Event) {
 
 <style scoped>
 .picture {
-  width: 100px;
+  border: 5px solid red;
+  width: 200px;
+  height: 100px;
   overflow: hidden;
+  object-fit: cover;
 }
 </style>

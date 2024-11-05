@@ -101,11 +101,9 @@ picture {
   box-sizing: border-box;
 
   img {
-    /* 默认的属性 */
-    object-fit: cover;
-    vertical-align: top;
-
     all: inherit;
+    /* object-fit: cover; */
+    /* vertical-align: top; */
 
     /* 不继承的属性 */
     width: 100%;
