@@ -97,7 +97,7 @@ function assertNotNil<T>(v: T, message?: string): asserts v is NonNullable<T> {
 
 <style scoped>
 picture {
-  display: block;
+  display: inline-block;
   box-sizing: border-box;
 
   img {
