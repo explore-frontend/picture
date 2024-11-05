@@ -103,9 +103,8 @@ picture {
   img {
     all: inherit;
     /* object-fit: cover; */
-    /* vertical-align: top; */
-
     /* 不继承的属性 */
+    vertical-align: top;
     width: 100%;
     height: 100%;
     background: none;
