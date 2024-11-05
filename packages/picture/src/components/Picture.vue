@@ -98,17 +98,18 @@ function assertNotNil<T>(v: T, message?: string): asserts v is NonNullable<T> {
 <style scoped>
 picture {
   display: block;
+  box-sizing: border-box;
 
   img {
     /* 默认的属性 */
     object-fit: cover;
     vertical-align: top;
-    width: 100%;
-    height: 100%;
 
     all: inherit;
 
-    /* 不能继承的属性 */
+    /* 不继承的属性 */
+    width: 100%;
+    height: 100%;
     background: none;
     border: none;
     margin: 0;
