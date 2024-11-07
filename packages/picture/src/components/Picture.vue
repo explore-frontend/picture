@@ -101,7 +101,7 @@ picture {
 
   img {
     width: 100%;
-    vertical-align: top;
+    // vertical-align: top;
   }
 
   .placeholder-player {
