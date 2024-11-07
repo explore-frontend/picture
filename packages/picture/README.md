@@ -85,11 +85,9 @@ type PictureProp = {
 
 ##  样式问题
 
-组件内部是<picture><img /></picture>，其中img直接继承父元素的所有css属性，这是为了避免使用:deep()才能给img设置样式。
+组件内部是<picture><img /></picture>，其中给Picture传入的Props会被透传到 img 元素上，但是在 `<style scoped>` 中设置的样式会被vue添加的hash给拦截，无法对img生效。
 
-使用时通过class设置样式时，会同时对这两个标签生效，组件内部已经对background、border、margin、padding等样式进行了过滤。
-
-如果使用其他属性时，样式出现了和预期不符合的问题，请尝试直接使用:deep(img)，或者使用行内样式（会直接透传到img），使样式只对img标签失效。
+所以推荐使用 `:deep(.Picture组件class名) {}` 添加样式，如果有需要为picture标签添加属性的需求，可以使用 rootAttrs props 传入。具体可以看demo。
 
 
 ### 建议添加 eslint 规则
@@ -111,3 +109,58 @@ type PictureProp = {
 ## 兼容性
 
 vue >= 3.3
+
+# Demo
+
+```html
+<script setup lang="ts">
+import Picture from "@kwai-explore/picture.vue";
+import examplePic from "./assets/example.jpg?preset=modern";
+
+function onLoad(...args: any[]) {
+  console.log("load", ...args);
+}
+function onClick(e: Event) {
+  console.log(e);
+}
+</script>
+
+<template>
+  <div>vue3 demo</div>
+  <!-- 
+    root-attrs 会被加到组件根元素 picture 元素
+    而直接加的props，全部会被透传到 img 元素上
+  -->
+  <div class="box">
+    <Picture
+      :src="examplePic"
+      placeholder="color"
+      @load="onLoad"
+      @click="onClick"
+      :root-attrs="{
+        class: 'diy-picture',
+        id: 'diy-picture',
+      }"
+      class="inner-img-class"
+      id="inner-img-id"
+    />
+  </div>
+</template>
+
+<style scoped lang="scss">
+/* .box {
+  width: 200px;
+  height: 100px;
+} */
+.diy-picture {
+  border: 4px solid yellow;
+}
+:deep(.inner-img-class) {
+  border: 4px solid red;
+  width: 200px;
+  height: 100px;
+  overflow: hidden;
+  object-fit: cover;
+}
+</style>
+```

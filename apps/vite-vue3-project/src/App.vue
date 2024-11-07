@@ -12,18 +12,36 @@ function onClick(e: Event) {
 
 <template>
   <div>vue3 demo</div>
-  <Picture
-    :src="examplePic"
-    placeholder="color"
-    class="picture"
-    @load="onLoad"
-    @click="onClick"
-  />
+  <!-- 
+    root-attrs 会被加到组件根元素 picture 元素
+    而直接加的props，全部会被透传到 img 元素上
+  -->
+  <div class="box">
+    <Picture
+      :src="examplePic"
+      placeholder="color"
+      @load="onLoad"
+      @click="onClick"
+      :root-attrs="{
+        class: 'diy-picture',
+        id: 'diy-picture',
+      }"
+      class="inner-img-class"
+      id="inner-img-id"
+    />
+  </div>
 </template>
 
-<style scoped>
-.picture {
-  border: 5px solid red;
+<style scoped lang="scss">
+/* .box {
+  width: 200px;
+  height: 100px;
+} */
+.diy-picture {
+  border: 4px solid yellow;
+}
+:deep(.inner-img-class) {
+  border: 4px solid red;
   width: 200px;
   height: 100px;
   overflow: hidden;

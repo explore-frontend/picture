@@ -83,7 +83,7 @@ function assertNotNil<T>(v: T, message?: string): asserts v is NonNullable<T> {
 </script>
 
 <template>
-  <picture v-bind:class="$attrs.class">
+  <picture v-bind="rootAttrs">
     <source v-for="(attrs, index) in sources" :key="index" v-bind="attrs" />
     <img
       v-bind="{ ...lastSource, ...$attrs }"
@@ -95,22 +95,13 @@ function assertNotNil<T>(v: T, message?: string): asserts v is NonNullable<T> {
   </picture>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 picture {
   display: inline-block;
-  box-sizing: border-box;
 
   img {
-    all: inherit;
-    /* object-fit: cover; */
-    /* 不继承的属性 */
-    vertical-align: top;
     width: 100%;
-    height: 100%;
-    background: none;
-    border: none;
-    margin: 0;
-    padding: 0;
+    // vertical-align: top;
   }
 
   .placeholder-player {

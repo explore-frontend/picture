@@ -1,11 +1,4 @@
-import type { ImgHTMLAttributes } from 'vue';
-
-/** Picture Props 类型 */
-export type PictureProp = {
-  src: PictureOption;
-  /** color 会展示一个渐变色块的 loading 效果，加上 fade-in 的加载成功的渐变 */
-  placeholder?: 'empty' | 'color';
-};
+import type { ImgHTMLAttributes, HTMLAttributes } from 'vue';
 
 /**
  * 主要推荐使用的类型，由 vite-imagetools 生成
@@ -32,6 +25,16 @@ export type FallbackPictureOption = {
 };
 
 export type PictureOption = ImagetoolsPictureOption | FallbackPictureOption;
+
+/** Picture Props 类型 */
+export type PictureProp = {
+  /** @see https://npm.corp.kuaishou.com/-/web/detail/@kwai-explore/picture.vue */
+  src: PictureOption;
+  /** color 会展示一个渐变色块的 loading 效果，加上 fade-in 的加载成功的渐变 */
+  placeholder?: 'empty' | 'color';
+  /** PictureRootAttrs，由于使用时加的属性会被注入到img元素上，所以这里提供一个给根元素加属性的api */
+  rootAttrs?: HTMLAttributes;
+};
 
 declare const PictureComponent: new () => {
   $props: PictureProp & Omit<ImgHTMLAttributes, 'src'>;
